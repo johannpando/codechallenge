@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "8372849a-ef05-4104-9a69-9ec18c9b0b65",
+		"name": "Code Challenge Export",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Transaction without reference",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"account_iban\": \"ES9820385778983000760236\",\n    \"date\": \"2019-07-16T16:55:42.000Z\",\n    \"amount\": 7643,\n    \"fee\": 3.18,\n    \"description\": \"Restaurant payment\",\n    \"channel\": \"INTERNAL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reference\": \"123456A\",\n    \"channel\": \"INTERNAL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/transactions/transactionstatus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"transactions",
+						"transactionstatus"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

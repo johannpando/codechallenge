@@ -1,7 +1,5 @@
 # Code Challenge
 
-Code Challenge
-
 ## Introduction
 
 The objective of the project is to create API-REST services with Spring Boot

@@ -37,6 +37,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String TIMESTAMP = "timestamp";
 	private static final String BAD_REQUEST = "BAD_REQUEST";
 
+	
+	/** 
+	 * @param ex
+	 * @param request
+	 * @return ResponseEntity<ErrorResponse>
+	 */
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
@@ -49,6 +55,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
+	
+	/** 
+	 * @param ex
+	 * @param headers
+	 * @param status
+	 * @param request
+	 * @return ResponseEntity<Object>
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -67,6 +81,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 
+	
+	/** 
+	 * @param ex
+	 * @param headers
+	 * @param status
+	 * @param request
+	 * @return ResponseEntity<Object>
+	 */
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -84,6 +106,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 
+	
+	/** 
+	 * @param response
+	 * @param ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(AccountBalanceBellowZeroNotAllowedException.class)
 	protected ResponseEntity<Object> accountBalanceException(HttpServletResponse response, RuntimeException ex) {
 
@@ -100,6 +128,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 
+	
+	/** 
+	 * @param response
+	 * @param ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(TransactionNotFoundException.class)
 	public ResponseEntity<Object> springHandleNotFound(HttpServletResponse response, RuntimeException ex) {
 		Map<String, Object> body = new LinkedHashMap<>();
@@ -114,6 +148,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 
+	
+	/** 
+	 * @param response
+	 * @param ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(SearchTransactionNotFoundException.class)
 	public ResponseEntity<Object> searchTransactionNotFoundException(HttpServletResponse response,
 			SearchTransactionNotFoundException ex) {
@@ -124,6 +164,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 
+	
+	/** 
+	 * @param response
+	 * @param ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler({ TransactionStatusEnumNotFoundException.class, ChannelStatusEnumNotFoundException.class })
 	public ResponseEntity<Object> springHandleNotFoundEnum(HttpServletResponse response, RuntimeException ex) {
 		Map<String, Object> body = new LinkedHashMap<>();

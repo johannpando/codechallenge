@@ -13,6 +13,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+/** 
+ * @return LocalDateTime
+ */
+
+/** 
+ * @return HttpStatus
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return List<TransactionDTO>
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -22,6 +22,11 @@ public class TransactionCreateServiceImpl implements TransactionCreateService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	
+	/** 
+	 * @param transactionDto
+	 * @return TransactionDTO
+	 */
 	@Override
 	public TransactionDTO createTransaction(TransactionDTO transactionDto) {
 
@@ -47,6 +52,11 @@ public class TransactionCreateServiceImpl implements TransactionCreateService {
 		return converToDto(transactionDAO.save(transaction));
 	}
 
+	
+	/** 
+	 * @param transactionDto
+	 * @return TransactionEntity
+	 */
 	private TransactionEntity dtoToEntity(TransactionDTO transactionDto) {
 		TransactionEntity transaction = new TransactionEntity();
 		if (transactionDto.getReference() == null) {
@@ -69,6 +79,11 @@ public class TransactionCreateServiceImpl implements TransactionCreateService {
 		return transaction;
 	}
 
+	
+	/** 
+	 * @param t
+	 * @return TransactionDTO
+	 */
 	private TransactionDTO converToDto(TransactionEntity t) {
 
 		return modelMapper.map(t, TransactionDTO.class);

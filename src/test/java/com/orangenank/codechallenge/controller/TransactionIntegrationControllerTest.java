@@ -46,6 +46,10 @@ public class TransactionIntegrationControllerTest {
 		mvc = MockMvcBuilders.standaloneSetup(transactionController).build();
 	}
 
+	
+	/** 
+	 * @throws Exception
+	 */
 	@Test
 	public void givenTransactions_whenCreateTransactions_thenReturnJson() throws Exception {
 

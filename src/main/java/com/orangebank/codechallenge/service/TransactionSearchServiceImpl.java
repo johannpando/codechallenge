@@ -28,18 +28,30 @@ public class TransactionSearchServiceImpl implements TransactionSearchService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	
+	/** 
+	 * @param accountIBAN
+	 * @param orderBy
+	 * @return List<TransactionDTO>
+	 */
 	@Override
-	public List<TransactionDTO> searchTransaction(String accountIBAN, String orderBy) {
-		List<TransactionEntity> listTransactionsBBDD = transactionDAO.findByAccountIban(accountIBAN,
+	public List<TransactionDTO> searchTransaction(final String accountIBAN, final String orderBy) {
+		final List<TransactionEntity> listTransactionsBBDD = transactionDAO.findByAccountIban(accountIBAN,
 				new Sort(Sort.Direction.fromString(orderBy), "amount"));
 		return listTransactionsBBDD.stream().map(t -> converToDto(t)).collect(Collectors.toList());
 	}
 
-	public TransactionDTO getTransactionStatus(String reference, String channel) {
+	
+	/** 
+	 * @param reference
+	 * @param channel
+	 * @return TransactionDTO
+	 */
+	public TransactionDTO getTransactionStatus(final String reference, final String channel) {
 		if (reference == null) {
 			throw new TransactionException("Reference is mandatory");
 		}
-		TransactionEntity transaction = transactionDAO.getTransactionStatus(reference, channel);
+		final TransactionEntity transaction = transactionDAO.getTransactionStatus(reference, channel);
 		if (transaction == null) {
 			throw new SearchTransactionNotFoundException(reference, TransactionEnum.INVALID.name());
 		}
@@ -47,73 +59,110 @@ public class TransactionSearchServiceImpl implements TransactionSearchService {
 		return converToDto(transaction);
 	}
 
-	private void checkBusinnesCases(String channel, TransactionEntity transaction) {
+	
+	/** 
+	 * @param channel
+	 * @param transaction
+	 */
+	private void checkBusinnesCases(final String channel, final TransactionEntity transaction) {
 		if (chanelIsClientOrAtm(channel) && transactionDateIsBeforeToday(transaction)) {
 			transaction.setStatus(TransactionEnum.SETTLED.name());
-			BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
+			final BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
 			transaction.setAmount(newAmoun.doubleValue());
-		}
-		if (chanelIsClientOrAtm(channel) && transactionDateIsEqualToday(transaction)) {
+		} else if (chanelIsClientOrAtm(channel) && transactionDateIsEqualToday(transaction) || channelIsATMAndTransactionDateIsGreaterToday(
+				channel, transaction)) {
 			transaction.setStatus(TransactionEnum.PENDING.name());
-			BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
+			final BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
 			transaction.setAmount(newAmoun.doubleValue());
-		}
-		if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsBeforeToday(transaction)) {
+		} else if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsBeforeToday(transaction)) {
 			transaction.setStatus(TransactionEnum.SETTLED.name());
-		}
-		if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsEqualToday(transaction)) {
+		} else if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsEqualToday(transaction)) {
 			transaction.setStatus(TransactionEnum.PENDING.name());
-		}
-		if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction)) {
+		} else if (ChannelStatusEnum.INTERNAL.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction)) {
 			transaction.setStatus(TransactionEnum.FUTURE.name());
-		}
-		if (ChannelStatusEnum.CLIENT.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction)) {
+		} else if (ChannelStatusEnum.CLIENT.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction)) {
 			transaction.setStatus(TransactionEnum.FUTURE.name());
-			BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
-			transaction.setAmount(newAmoun.doubleValue());
-		}
-		if (ChannelStatusEnum.ATM.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction)) {
-			transaction.setStatus(TransactionEnum.PENDING.name());
-			BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
+			final BigDecimal newAmoun = amountSubstractingTheFee(transaction.getAmount(), transaction.getFee());
 			transaction.setAmount(newAmoun.doubleValue());
 		}
 	}
 
-	private BigDecimal amountSubstractingTheFee(Double tAmount, Double tFee) {
-		BigDecimal amount = BigDecimal.valueOf(tAmount);
-		BigDecimal fee = BigDecimal.valueOf(tFee);
+	
+	/** 
+	 * @param channel
+	 * @param transaction
+	 * @return boolean
+	 */
+	private boolean channelIsATMAndTransactionDateIsGreaterToday(final String channel, final TransactionEntity transaction) {
+		return ChannelStatusEnum.ATM.name().equalsIgnoreCase(channel) && transactionDateIsGreaterToday(transaction);
+	}
+
+	
+	/** 
+	 * @param tAmount
+	 * @param tFee
+	 * @return BigDecimal
+	 */
+	private BigDecimal amountSubstractingTheFee(final Double tAmount, final Double tFee) {
+		final BigDecimal amount = BigDecimal.valueOf(tAmount);
+		final BigDecimal fee = BigDecimal.valueOf(tFee);
 		return amount.subtract(fee);
 	}
 
-	private boolean chanelIsClientOrAtm(String channel) {
+	
+	/** 
+	 * @param channel
+	 * @return boolean
+	 */
+	private boolean chanelIsClientOrAtm(final String channel) {
 		return ChannelStatusEnum.CLIENT.name().equalsIgnoreCase(channel)
 				|| ChannelStatusEnum.ATM.name().equalsIgnoreCase(channel);
 	}
 
-	private boolean transactionDateIsBeforeToday(TransactionEntity transaction) {
-		LocalDate today = LocalDate.now();
-		LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	
+	/** 
+	 * @param transaction
+	 * @return boolean
+	 */
+	private boolean transactionDateIsBeforeToday(final TransactionEntity transaction) {
+		final LocalDate today = LocalDate.now();
+		final LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		return transactionDate.isBefore(today);
 	}
 
-	private boolean transactionDateIsEqualToday(TransactionEntity transaction) {
+	
+	/** 
+	 * @param transaction
+	 * @return boolean
+	 */
+	private boolean transactionDateIsEqualToday(final TransactionEntity transaction) {
 
-		LocalDate today = LocalDate.now();
-		LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		final LocalDate today = LocalDate.now();
+		final LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		return today.isEqual(transactionDate);
 	}
 
-	private boolean transactionDateIsGreaterToday(TransactionEntity transaction) {
+	
+	/** 
+	 * @param transaction
+	 * @return boolean
+	 */
+	private boolean transactionDateIsGreaterToday(final TransactionEntity transaction) {
 
-		LocalDate today = LocalDate.now();
-		LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		final LocalDate today = LocalDate.now();
+		final LocalDate transactionDate = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		return transactionDate.isAfter(today);
 	}
 
-	public TransactionDTO converToDto(TransactionEntity t) {
+	
+	/** 
+	 * @param t
+	 * @return TransactionDTO
+	 */
+	public TransactionDTO converToDto(final TransactionEntity t) {
 		return modelMapper.map(t, TransactionDTO.class);
 	}
 }

@@ -9,15 +9,27 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 @SpringBootApplication
 public class OrangebankCodechallengeApplication {
 
+	
+	/** 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(OrangebankCodechallengeApplication.class, args);
 	}
 
+	
+	/** 
+	 * @return ModelMapper
+	 */
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 
+	
+	/** 
+	 * @return MethodValidationPostProcessor
+	 */
 	@Bean
 	public MethodValidationPostProcessor methodValidationPostProcessor() {
 		return new MethodValidationPostProcessor();

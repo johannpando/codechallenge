@@ -12,6 +12,38 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return Date
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return TransactionEnum
+ */
+
+/** 
+ * @return ChannelStatusEnum
+ */
 @Getter
 @Setter
 @NoArgsConstructor

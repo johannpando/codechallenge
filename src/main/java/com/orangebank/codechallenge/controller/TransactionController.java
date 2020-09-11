@@ -42,6 +42,11 @@ public class TransactionController {
 
 	private TransactionSearchService transactionSearchService;
 
+	
+	/** 
+	 * @param request
+	 * @return ResponseEntity<ResponseBodyCustom>
+	 */
 	@JsonView(View.Summary.class)
 	@PostMapping("/transactions")
 	@ApiOperation(value = "Create a transaction", notes = "If any error occurs, it will be intercepted by an error handler")
@@ -58,6 +63,11 @@ public class TransactionController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	
+	/** 
+	 * @param searchTransaction(
+	 * @return ResponseEntity<ResponseBodyCustom>
+	 */
 	@GetMapping("/transactions/{accountIban}")
 	@ApiOperation(value = "Search a Transaction", notes = "If any error occurs, it will be intercepted by an error handler")
 	public ResponseEntity<ResponseBodyCustom> searchTransaction(@PathVariable String accountIban,
@@ -71,6 +81,11 @@ public class TransactionController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	
+	/** 
+	 * @param transactionStatus(
+	 * @return ResponseEntity<ResponseBodyCustom>
+	 */
 	@GetMapping("/transactions/status/{reference}/{channel}")
 	@ApiOperation(value = "Search a transaction by reference and status", notes = "If any error occurs, it will be intercepted by an error handler")
 	public ResponseEntity<ResponseBodyCustom> transactionStatus(@PathVariable @Valid String reference,
@@ -87,16 +102,29 @@ public class TransactionController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	
+	/** 
+	 * @param transactionCreateService
+	 */
 	@Autowired
 	public void setTransactionCreateService(TransactionCreateService transactionCreateService) {
 		this.transactionCreateService = transactionCreateService;
 	}
 
+	
+	/** 
+	 * @param transactionSearchService
+	 */
 	@Autowired
 	public void setTransactionSearchService(TransactionSearchService transactionSearchService) {
 		this.transactionSearchService = transactionSearchService;
 	}
 
+	
+	/** 
+	 * @param request
+	 * @return TransactionDTO
+	 */
 	private TransactionDTO requestToDto(RequestBodyCustom request) {
 		TransactionDTO transactionDTO = new TransactionDTO();
 		transactionDTO.setReference(request.getReference());

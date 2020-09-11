@@ -7,6 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return List<String>
+ */
 @Getter
 @Setter
 @AllArgsConstructor

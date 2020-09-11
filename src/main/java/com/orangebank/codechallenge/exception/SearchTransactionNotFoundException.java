@@ -2,6 +2,14 @@ package com.orangebank.codechallenge.exception;
 
 import lombok.Getter;
 
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
 @Getter
 public class SearchTransactionNotFoundException extends RuntimeException {
 

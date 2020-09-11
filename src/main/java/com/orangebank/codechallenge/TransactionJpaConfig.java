@@ -28,6 +28,10 @@ public class TransactionJpaConfig {
 	@Autowired
 	private Environment env;
 
+	
+	/** 
+	 * @return DataSource
+	 */
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -39,6 +43,10 @@ public class TransactionJpaConfig {
 		return dataSource;
 	}
 
+	
+	/** 
+	 * @return LocalContainerEntityManagerFactoryBean
+	 */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -49,6 +57,11 @@ public class TransactionJpaConfig {
 		return em;
 	}
 
+	
+	/** 
+	 * @param entityManagerFactory
+	 * @return JpaTransactionManager
+	 */
 	@Bean
 	JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -56,11 +69,19 @@ public class TransactionJpaConfig {
 		return transactionManager;
 	}
 
+	
+	/** 
+	 * @return PlaceholderConfigurerSupport
+	 */
 	@Bean
 	public static PlaceholderConfigurerSupport propertyPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
+	
+	/** 
+	 * @return Properties
+	 */
 	final Properties additionalProperties() {
 		final Properties hibernateProperties = new Properties();
 

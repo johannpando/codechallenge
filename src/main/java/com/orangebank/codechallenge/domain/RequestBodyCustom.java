@@ -12,9 +12,45 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return Date
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
 @Getter
 @Setter
 @NoArgsConstructor
+
+/** 
+ * @return String
+ */
 @ToString
 public class RequestBodyCustom {
 

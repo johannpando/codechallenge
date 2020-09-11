@@ -384,6 +384,17 @@ public class AcceptanceTest {
 		}
 	}
 
+	
+	/** 
+	 * @param host
+	 * @param reference
+	 * @param channel
+	 * @param date
+	 * @return JSONObject
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	private JSONObject createTransaction(String host, String reference, String channel, String date)
 			throws ClientProtocolException, IOException, JSONException {
 		CloseableHttpClient client = HttpClientBuilder.create().build();

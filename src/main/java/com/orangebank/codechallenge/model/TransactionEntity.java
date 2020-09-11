@@ -18,9 +18,45 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "transactions")
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return Date
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return Double
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
+
+/** 
+ * @return String
+ */
 @Getter
 @Setter
 @NoArgsConstructor
+
+/** 
+ * @return String
+ */
 @ToString
 public class TransactionEntity implements Serializable {
 
